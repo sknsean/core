@@ -17,7 +17,7 @@ python do_rmwork () {
         if os.path.basename(entry) == tmp:
             pass
         else:
-            bb.debug(0, "Removing %s"%(entry))
+            bb.debug("Removing %s"%(entry))
             if os.path.isdir(entry):
                 shutil.rmtree(entry)
             else:
@@ -26,7 +26,6 @@ python do_rmwork () {
     stampdir = d.getVar("STAMPDIR", True)
     shutil.rmtree(stampdir)
 }
-
 # Local Variables:
 # mode: python
 # End:

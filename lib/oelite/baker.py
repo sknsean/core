@@ -516,10 +516,10 @@ class OEliteBaker:
 
         if self.options.rmwork:
             for recipe in recipes:
-                if (tasks_todo != ["build"]
-                    and self.runq.is_recipe_primary(recipe[0])):
-                    debug("skipping...")
-                    continue
+                #if (tasks_todo != ["build"]
+                    #and self.runq.is_recipe_primary(recipe[0])):
+                    #debug("skipping...")
+                    #continue
                 debug("adding %s:do_rmwork"%(recipe[1]))
                 recipe = self.cookbook.get_recipe(recipe[0])
                 self.runq._add_recipe(recipe, "do_rmwork")
