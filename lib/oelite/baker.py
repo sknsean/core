@@ -518,9 +518,10 @@ class OEliteBaker:
             for recipe in recipes:
                 #if (tasks_todo != ["build"]
                     #and self.runq.is_recipe_primary(recipe[0])):
-                    #debug("skipping...")
-                    #continue
-                debug("adding %s:do_rmwork"%(recipe[1]))
+                if (self.runq.is_recipe_primary(recipe[0]) or recipe[2] == "rootfs"):
+                    debug("%s:%s skipping..."%(recipe[1],recipe[2]))
+                    continue
+                debug("adding %s:%s do_rmwork"%(recipe[1],recipe[2]))
                 recipe = self.cookbook.get_recipe(recipe[0])
                 self.runq._add_recipe(recipe, "do_rmwork")
                 task = self.cookbook.get_task(recipe=recipe, name="do_rmwork")
