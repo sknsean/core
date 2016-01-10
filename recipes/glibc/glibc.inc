@@ -43,6 +43,7 @@ do_configure_siteinfo() {
 }
 
 EXTRA_OECONF += "\
+	libc_cv_slibdir='/lib' \
 	--disable-profile \
 	--with-tls \
 	--with-headers=${HOST_SYSROOT}${includedir} \
