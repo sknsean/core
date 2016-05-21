@@ -43,8 +43,9 @@ do_install_targets:canadian-cross = "install-gcc"
 PROVIDES_${PN} = "cc"
 PROVIDES_${PN}-g++ = "c++"
 
-FILES_${PN}[qa] += "allow-libs-in-bindirs"
-PROVIDES_${PN}[qa] += "allow-missing-provides:liblto-plugin"
+
+FILES_${PN}[qa] += "allow-elf-libs-in-other-dirs allow-libs-in-bindirs"
+PROVIDES_${PN}[qa] += "allow-missing-provides:liblto-plugin allow-missing-provides:libcc1plugin-0 allow-missing-provides:libcc1plugin allow-missing-provides:libcc1 allow-missing-provides:libcc1-0 allow-missing-provides:liblto-plugin-0"
 
 # Get rid of gcc-dev package
 PACKAGES = "${PN}-dbg ${PN}-doc ${PN}-locale ${PN}"
