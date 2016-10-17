@@ -1,0 +1,82 @@
+DESCRIPTION = "A new standard library to power a new generation of Linux-based devices. \
+musl is lightweight, fast, simple, free, and strives to be correct in the sense of \
+standards-conformance and safety."
+HOMEPAGE = "http://www.musl-libc.org/"
+LICENSE = "MIT"
+
+inherit autotools
+
+SRC_URI = "https://www.musl-libc.org/releases/musl-${PV}.tar.gz"
+
+RECIPE_TYPES = "machine sdk"
+
+COMPATIBLE_HOST_ARCHS = ".*linux-musl.*"
+
+C_DEPENDS = "host-cross:gcc-bootstrap"
+
+EXTRA_OECONF = "--libdir=${base_libdir}"
+
+DEPENDS += "linux-headers"
+DEPENDS_${PN}-dev = "linux-headers"
+RDEPENDS_${PN}-dev = "linux-headers"
+
+LIBTOOL_DEPENDS = ""
+
+inherit auto-package-libs
+AUTO_PACKAGE_LIBS = "c m rt dl pthread util crypt resolv xnet"
+
+do_install[postfuncs] += "do_install_extra_files"
+do_install_extra_files() {
+	for l in crypt dl m pthread resolv rt util xnet
+	do
+		ln -s libc.so ${D}${base_libdir}/lib$l.so
+	done
+}
+
+PACKAGES += "${PN}-ld"
+PROVIDES_${PN}-ld = "ld-so"
+PROVIDES_${PN}-ld[qa] = "is-library"
+FILES_${PN}-ld = "${base_sharedlibdir}/ld-${PV}.so ${base_sharedlibdir}/ld*.so.*"
+PACKAGES =+ "${PN}-ld-dbg"
+PROVIDES_${PN}-ld-dbg = "ld-so-dbg"
+FILES_${PN}-ld-dbg = "${base_sharedlibdir}/.debug/ld-${PV}.so"
+
+DEPENDS_${PN}-librt = "libpthread"
+RDEPENDS_${PN}-librt = "libpthread"
+
+AUTO_PACKAGE_LIBS_LIBDIR = "${base_sharedlibdir}:lib:,-${PV}:.so,.so.*:"
+AUTO_PACKAGE_LIBS_LIBDIR += "${sharedlibdir}:lib:::.so"
+AUTO_PACKAGE_LIBS_LIBDIR += "${libdir}:lib:::.a,_nonshared.a,_pic.a,_pic.map"
+AUTO_PACKAGE_LIBS_DEV_DEPENDS = "${PN}-dev"
+AUTO_PACKAGE_LIBS_DEV_RDEPENDS = "${PN}-dev"
+#AUTO_PACKAGE_LIBS_DEPENDS = "ld-so libc"
+#AUTO_PACKAGE_LIBS_RDEPENDS = "ld-so libc"
+DEPENDS_${PN}-libm += "ld-so libc"
+RDEPENDS_${PN}-libm += "ld-so libc"
+DEPENDS_${PN}-librt += "ld-so libc"
+RDEPENDS_${PN}-librt += "ld-so libc"
+DEPENDS_${PN}-libdl += "ld-so libc"
+RDEPENDS_${PN}-libdl += "ld-so libc"
+DEPENDS_${PN}-libpthread += "ld-so libc"
+RDEPENDS_${PN}-libpthread += "ld-so libc"
+DEPENDS_${PN}-libutil += "ld-so libc"
+RDEPENDS_${PN}-libutil += "ld-so libc"
+DEPENDS_${PN}-libcrypt += "ld-so libc"
+RDEPENDS_${PN}-libcrypt += "ld-so libc"
+DEPENDS_${PN}-libresolv += "ld-so libc"
+RDEPENDS_${PN}-libresolv += "ld-so libc"
+DEPENDS_${PN}-libxnet += "ld-so libc"
+RDEPENDS_${PN}-libxnet += "ld-so libc"
+
+PACKAGES += "${PN}-musl-gcc"
+
+FILES_${PN}-musl-gcc += "${bindir}/musl-gcc \
+			${libdir}/musl-gcc.specs"
+
+addhook fixup_libc_pkgdepends to post_recipe_parse after auto_package_libs
+def fixup_libc_pkgdepends(d):
+    d.set('DEPENDS_musl-libc', '${PN}-libc-dev_${PV} ld-so')
+    d.set('RDEPENDS_musl-libc', 'ld-so')
+    d.set('RDEPENDS_musl-libc-dev', '${PN}-libc_${PV}')
+
+#PRIORITY = "-1"
