@@ -43,8 +43,9 @@ do_install_targets:canadian-cross = "install-gcc"
 PROVIDES_${PN} = "cc"
 PROVIDES_${PN}-g++ = "c++"
 
-FILES_${PN}[qa] += "allow-libs-in-bindirs"
-PROVIDES_${PN}[qa] += "allow-missing-provides:liblto-plugin"
+
+FILES_${PN}[qa] += "allow-elf-libs-in-other-dirs allow-libs-in-bindirs"
+PROVIDES_${PN}[qa] += "allow-missing-provides:liblto-plugin allow-missing-provides:libcc1plugin-0 allow-missing-provides:libcc1plugin allow-missing-provides:libcc1 allow-missing-provides:libcc1-0 allow-missing-provides:liblto-plugin-0"
 
 # Get rid of gcc-dev package
 PACKAGES = "${PN}-dbg ${PN}-doc ${PN}-locale ${PN}"
@@ -67,7 +68,7 @@ RDEPENDS_${PN}:>HOST_LIBC_mingw = " host:libpthread"
 
 inherit auto-package-libs
 AUTO_PACKAGE_LIBS = "gcc gcov atomic gomp itm mudflap mudflapth ssp \
-	stdc++ supc++ quadmath asan tsan ubsan"
+	stdc++ supc++ quadmath asan tsan ubsan lsan"
 AUTO_PACKAGE_LIBS:canadian-cross = ""
 AUTO_PACKAGE_LIBS_LIBDIR = "/${TARGET_ARCH}/sysroot${target_libdir}:lib:,_s,_s_sjlj,_eh,_nonshared,_pic,_nonshm"
 AUTO_PACKAGE_LIBS_LIBDIR:>TARGET_LIBC_mingw = ":-*.dll /${TARGET_ARCH}/sysroot${target_sharedlibdir}:lib:,_s,_s_sjlj,_eh,_nonshared,_pic,_nonshm:-*.dll"
@@ -104,9 +105,11 @@ FILES_${PN}-libsanitizer-dev = "/${TARGET_ARCH}/sysroot${target_libdir}/libsanit
 DEPENDS_${PN}-libasan-dev += "${PN}-libsanitizer-dev"
 DEPENDS_${PN}-libtsan-dev += "${PN}-libsanitizer-dev"
 DEPENDS_${PN}-libubsan-dev += "${PN}-libsanitizer-dev"
+DEPENDS_${PN}-liblsan-dev += "${PN}-libsanitizer-dev"
 RDEPENDS_${PN}-libasan-dev += "${PN}-libsanitizer-dev"
 RDEPENDS_${PN}-libtsan-dev += "${PN}-libsanitizer-dev"
 RDEPENDS_${PN}-libubsan-dev += "${PN}-libsanitizer-dev"
+RDEPENDS_${PN}-liblsan-dev += "${PN}-libsanitizer-dev"
 
 # FIXME: remove the empty packages instead
 PROVIDES_${PN}-libgcov[qa] = "allow-missing-soname"
