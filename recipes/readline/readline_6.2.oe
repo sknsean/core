@@ -11,6 +11,8 @@ require readline.inc
 
 SRC_URI:>TARGET_OS_darwin = " file://patch-shobj-conf.patch"
 
+LIBRARY_VERSION = "6"
+
 # Local Variables:
 # mode: python
 # End:
