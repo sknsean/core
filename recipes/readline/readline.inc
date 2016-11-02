@@ -16,17 +16,15 @@ AUTOCONFDIRS = "/support"
 
 EXTRA_OECONF += "${TERMCAP_OECONF}"
 TERMCAP_OECONF = " ac_cv_lib_ncurses_tgetent=yes bash_cv_termcap_lib=libncurses"
-TERMCAP_OECONF:HOST_LIBC_mingw = ""
+TERMCAP_OECONF:HOST_LIBC_mingw = " bash_cv_termcap_lib=gnutermcap"
 
 inherit auto-package-libs
 AUTO_PACKAGE_LIBS = "readline history"
-AUTO_PACKAGE_LIBS_DEPENDS = "libc ${TERMCAP}"
-AUTO_PACKAGE_LIBS_RDEPENDS = "libc ${TERMCAP}"
+AUTO_PACKAGE_LIBS_DEPENDS = "libc libtermcap"
+AUTO_PACKAGE_LIBS_RDEPENDS = "libc libtermcap"
 AUTO_PACKAGE_LIBS_DEV_DEPENDS = "${PN}-dev"
 AUTO_PACKAGE_LIBS_DEV_RDEPENDS = "${PN}-dev"
 
 SOLIBS:HOST_LIBC_mingw = "${@d.get('PV').split('.')[0]}.dll"
 
-DEPENDS = "${TERMCAP}"
-TERMCAP = "libtermcap"
-TERMCAP:HOST_LIBC_mingw = ""
+DEPENDS = "libtermcap"
