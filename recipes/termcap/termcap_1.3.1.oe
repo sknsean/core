@@ -1,0 +1,19 @@
+#We don't want this for anything else than mingw
+COMPATIBLE_HOST_ARCHS = ".*-mingw.*"
+
+inherit autotools library
+
+SRC_URI += "https://ftp.gnu.org/gnu/termcap/termcap-${PV}.tar.gz"
+
+do_configure() {
+	${CONFIGURE_SCRIPT} \
+		--prefix=${prefix} --build=${BUILD_ARCH} --host=${HOST_ARCH} \
+		--target=${TARGET_ARCH}
+}
+
+do_install() {
+	make install prefix=${D}/usr/
+	rm -rf ${D}/usr/info/
+}
+
+PROVIDES_${PN} = "libtermcap"
