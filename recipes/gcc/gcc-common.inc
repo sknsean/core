@@ -229,9 +229,13 @@ do_configure_gcc() {
 	--disable-multilib \
 	--disable-multiarch \
 	--with-system-zlib \
+	${DISABLE_SANITIZER} \
 	${do_configure_args} \
 	$*
 }
+
+DISABLE_SANITIZER = ""
+DISABLE_SANITIZER:>TARGET_LIBC_musl = "--disable-libsanitizer"
 
 do_compile_targets = ""
 do_compile() {
